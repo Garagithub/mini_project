@@ -1,19 +1,16 @@
 package com.usuariosminiproyecto.userproyecto.controller;
 import com.usuariosminiproyecto.userproyecto.model.Role;
 import com.usuariosminiproyecto.userproyecto.model.User;
-import com.usuariosminiproyecto.userproyecto.repository.RoleRepository;
 import com.usuariosminiproyecto.userproyecto.repository.UserRepository;
-import com.usuariosminiproyecto.userproyecto.service.CustomUserResponse;
+import com.usuariosminiproyecto.userproyecto.dto.CustomUserResponse;
 import com.usuariosminiproyecto.userproyecto.service.Expceptions.UserNotAuthorizedException;
 import com.usuariosminiproyecto.userproyecto.service.Expceptions.UserNotFoundException;
-import com.usuariosminiproyecto.userproyecto.service.RoleService;
 import com.usuariosminiproyecto.userproyecto.service.Startegy.AdministratorActionStrategy;
 import com.usuariosminiproyecto.userproyecto.service.Startegy.ManagerActionStrategy;
-import com.usuariosminiproyecto.userproyecto.service.Startegy.UserActionService;
-import com.usuariosminiproyecto.userproyecto.service.UserByRoleDTO;
-import com.usuariosminiproyecto.userproyecto.service.UserService;
+import com.usuariosminiproyecto.userproyecto.dto.UserByRoleDTO;
+import com.usuariosminiproyecto.userproyecto.service.Startegy.RoleUpdateStrategyFactory;
+import com.usuariosminiproyecto.userproyecto.service.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,17 +24,16 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
-    private final UserService userService;
+    private final UserServiceImpl userService;
     private final UserRepository userRepository; // Agrega esta línea
-    private final AdministratorActionStrategy administratorActionStrategy;
-    private final ManagerActionStrategy managerActionStrategy;
+    private final RoleUpdateStrategyFactory roleUpdateStrategyFactory;
 
     @Autowired
-    public UserController(UserService userService, UserRepository userRepository,AdministratorActionStrategy administratorActionStrategy, ManagerActionStrategy managerActionStrategy) { // Modifica este constructor
+    public UserController(UserServiceImpl userService, UserRepository userRepository,
+                          RoleUpdateStrategyFactory roleUpdateStrategyFactory) { // Modifica este constructor
         this.userService = userService;
         this.userRepository = userRepository; // Agrega esta línea
-        this.administratorActionStrategy = administratorActionStrategy;
-        this.managerActionStrategy = managerActionStrategy;
+        this.roleUpdateStrategyFactory = roleUpdateStrategyFactory;
     }
 
 
@@ -108,14 +104,7 @@ public class UserController {
         User userToUpdate = userOptional.get();
 
         // Ejecutar la estrategia correspondiente
-        if (adminRole.getDescription().equals("Administrador")) {
-            administratorActionStrategy.execute(adminUserId, userIdToModify, newRole,activateUser);
-        } else if (adminRole.getDescription().equals("Gerente")) {
-            managerActionStrategy.execute(adminUserId, userIdToModify, newRole,activateUser);
-        }
-        else {
-            throw new UserNotAuthorizedException("El usuario no tiene permisos de administrador o gerente");
-        }
+        roleUpdateStrategyFactory.execute(adminRole.getDescription());
     }
 
 

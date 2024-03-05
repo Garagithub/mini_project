@@ -5,16 +5,16 @@ import com.usuariosminiproyecto.userproyecto.model.User;
 import com.usuariosminiproyecto.userproyecto.repository.UserRepository;
 import com.usuariosminiproyecto.userproyecto.service.Expceptions.UserNotAuthorizedException;
 import com.usuariosminiproyecto.userproyecto.service.Expceptions.UserNotFoundException;
-import com.usuariosminiproyecto.userproyecto.service.UserService;
+import com.usuariosminiproyecto.userproyecto.service.impl.UserServiceImpl;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
 @Component
 public class ManagerActionStrategy implements UserActionStrategy {
-    private final UserService userService;
+    private final UserServiceImpl userService;
     private final UserRepository userRepository;
 
-    public ManagerActionStrategy(UserService userService, UserRepository userRepository) {
+    public ManagerActionStrategy(UserServiceImpl userService, UserRepository userRepository) {
         this.userService = userService;
         this.userRepository = userRepository;
     }

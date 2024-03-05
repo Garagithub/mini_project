@@ -5,15 +5,15 @@ import com.usuariosminiproyecto.userproyecto.model.User;
 import com.usuariosminiproyecto.userproyecto.repository.UserRepository;
 import com.usuariosminiproyecto.userproyecto.service.Expceptions.UserNotAuthorizedException;
 import com.usuariosminiproyecto.userproyecto.service.Expceptions.UserNotFoundException;
-import com.usuariosminiproyecto.userproyecto.service.UserService;
+import com.usuariosminiproyecto.userproyecto.service.impl.UserServiceImpl;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
 @Component
 public class AdministratorActionStrategy implements UserActionStrategy {
-    private static UserService userService;
+    private static UserServiceImpl userService;
     private static UserRepository userRepository;
-    public AdministratorActionStrategy(UserService userService, UserRepository userRepository) { // Modifica este constructor
+    public AdministratorActionStrategy(UserServiceImpl userService, UserRepository userRepository) { // Modifica este constructor
         this.userService = userService;
         this.userRepository = userRepository; // Agrega esta línea
     }

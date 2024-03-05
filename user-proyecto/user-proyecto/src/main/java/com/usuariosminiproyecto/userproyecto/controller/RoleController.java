@@ -1,6 +1,6 @@
 package com.usuariosminiproyecto.userproyecto.controller;
 import com.usuariosminiproyecto.userproyecto.model.Role;
-import com.usuariosminiproyecto.userproyecto.service.RoleService;
+import com.usuariosminiproyecto.userproyecto.service.impl.RoleServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,10 +13,10 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/roles")
 public class RoleController {
-    private final RoleService roleService;
+    private final RoleServiceImpl roleService;
 
     @Autowired
-    public RoleController(RoleService roleService) {
+    public RoleController(RoleServiceImpl roleService) {
         this.roleService = roleService;
     }
 
